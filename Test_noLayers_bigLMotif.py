@@ -176,7 +176,7 @@ def getCNNParams():
             )
     
             
-    train_op = tf.train.RMSPropOptimizer(0.001, decay=0.999, momentum=0.9).minimize(cost)
+    train_op = tf.train.RMSPropOptimizer(0.001, decay=0.999, momentum=0.99).minimize(cost)
     predict_op = tf.argmax(out_layer, 1)
     
     correct_pred = tf.equal(tf.argmax(Yish, 1), tf.argmax(_T, 1))
