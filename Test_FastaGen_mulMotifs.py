@@ -23,7 +23,7 @@ def vis_motifs_content(Xmer_size,path):
                 i+=Xmer_size
             else:
                 i+=1              
-    print(values)
+    print(len(values))
     return values
 
 def get_mul_Motifs(motif,num):
@@ -132,13 +132,27 @@ def ret_motifsList(motifs):
         LLm.append(st)
     return LLm
                 
-
-path="Data/DNA_seq.fa"    
+def gen_randomize_motifs_bgd_seq(path,back_path):
+     with open(back_path,"w") as f:
+        count=0
+        for seq_record in SeqIO.parse(path, "fasta"):
+            seq_record=seq_record.lower()
+            f.write(">seq"+str(count)+"\n")
+            count+=1
+            value=str(seq_record.seq[:])
+            value=''.join(random.sample(value,len(value)))
+            f.write(value+"\n")
+        f.close()
+    
+    
+    
+path="Data/dna_500_seq.fa"    
 mulMotif_path="Data/DNA_seq_mulMotif.fa"
-back_path="Data/DNA_backseq_mulMotif.fa"
-Xmer_size=10
-motifs=vis_motifs_content(Xmer_size,mulMotif_path)
-LLm=ret_motifsList(motifs)
+back_path="Data/dna_500_backseq.fa"
+Xmer_size=12
+motifs=vis_motifs_content(Xmer_size,path)
+gen_randomize_motifs_bgd_seq(path,back_path)
+#LLm=ret_motifsList(motifs)
 
     
 

@@ -49,11 +49,14 @@ def get_decodedsig(X,motif):
         i=0
         while i<91:
             val=str(row[i:10+i])
+            temp.append(val)
+            """
             if val.isupper():
                 temp.append(val)
             else:
                 val=val.lower()
                 temp.append(val)
+            """
             i=i+1
         X_val.append(temp)
                     

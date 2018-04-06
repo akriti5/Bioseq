@@ -96,9 +96,9 @@ def getCNNParams():
     
     
    #Parameters
-    epochs = 13
-    batch_sz = np.floor(div_Val/10).astype(np.int32)
-    n_batches = 10#N // batch_sz
+    epochs = 10
+    batch_sz = np.floor(div_Val/12).astype(np.int32)
+    n_batches = 12#N // batch_sz
     print("size is ",batch_sz,"number is ",n_batches)
     
     #Placeholders
@@ -218,13 +218,47 @@ def getCNNParams():
     plt.plot(LL)
     plt.show()
     print("Average accuracy",np.mean(np.array(acc)))
-    return Xtrain,Ytrain,kernel_array.astype(np.float32),bias_array.astype(np.float32),conv_array.astype(np.float32)
+    return Xtest,Ytest,kernel_array.astype(np.float32),bias_array.astype(np.float32),conv_array.astype(np.float32)
 
      
 X,Y,kernel_full,bias_full,conv_full=getCNNParams()
 Xarr=extract_motif_cls(X,Y)
 motif=['GAGGGACGGG', 'GCAGGGGGGA', 'GGGGGCAGAG']
 actual_X=get_decodedsig(Xarr,motif)
-conv_out=get_convolved_op(Xarr,kernel_full[-1][4],bias_full[-1][4])
-        
-        
+"""
+conv_out=get_convolved_op(Xarr,kernel_full[8][4],bias_full[8][4])
+
+filter_num=0  
+value_set=set()
+for z in range(conv_out.shape[2]):
+    filter_op=conv_out[:,:,z]
+    temp=set()
+    for row in filter_op:
+        val=np.max(row)
+        temp.add(val)
+    if len(value_set)<1:
+        value_set=temp
+        filter_num=z
+    elif len(temp)<len(value_set):
+        value_set=temp
+        filter_num=z
+filter_op=conv_out[:,:,filter_num]     
+max_values=np.max(filter_op, axis=1)
+unique, counts = np.unique(max_values, return_counts=True)
+dictionary=dict(zip(unique, counts))
+threshold=max(list(dictionary.values()))
+threshold=threshold/2
+keys=[]
+for key, value in dictionary.items():
+    if value>threshold:
+        keys.append(key)
+
+testing=set()
+for key in keys:
+    row, col = np.where(filter_op == key)
+    for i in range(len(row)):
+        val=actual_X[row[i]][col[i]]
+        testing.add(val)
+
+print(testing)
+"""
